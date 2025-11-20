@@ -1,17 +1,5 @@
-<form id="bookingForm">
-  <input type="text" name="name" placeholder="Name" required>
-  <input type="date" name="date" required>
-  <input type="time" name="time" required>
-  <input type="text" name="service" placeholder="Service" required>
-  <textarea name="notes" placeholder="Notes"></textarea>
-
-  <button type="submit">Submit</button>
-</form>
-
-<p id="responseMessage" style="color:red;"></p>
-
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxmkb5eeSwGYd1atFm8Eg5JSuEHWAHtQiFRD7Ith60yIjkb8C4FaIzXzRPshjwoZWlB/exec"; // MUST end with /exec
+const scriptURL = "https://script.google.com/macros/s/AKfycbxmkb5eeSwGYd1atFm8Eg5JSuEHWAHtQiFRD7Ith60yIjkb8C4FaIzXzRPshjwoZWlB/exec";
 
 document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -20,21 +8,18 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   const formData = Object.fromEntries(new FormData(form).entries());
 
   try {
-    const response = await fetch(scriptURL, {
+    await fetch(scriptURL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
     });
 
-    document.getElementById("responseMessage").innerText = "Booking submitted successfully!";
+    alert("Booking submitted successfully!");
     form.reset();
 
   } catch (error) {
-    document.getElementById("responseMessage").innerText =
-      "Error submitting booking. Please check your internet connection.";
+    alert("Error submitting booking. Please check your internet connection."); 
   }
 });
 </script>
