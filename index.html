@@ -1,23 +1,62 @@
+<form id="bookingForm">
+  <!-- Your form fields here (name, phone, email, etc.) -->
+  <input type="text" name="name" placeholder="Name" required>
+  <input type="tel" name="phone" placeholder="Phone" required>
+  <input type="email" name="email" placeholder="Email">
+  <input type="text" name="bike_type" placeholder="Bike Type" required>
+  <select name="service" required>
+    <option value="">Select Service</option>
+    <option value="basic">Basic Clean</option>
+    <option value="premium">Premium Detail</option>
+  </select>
+  <input type="date" name="date" required>
+  <input type="time" name="time" required>
+  <textarea name="notes" placeholder="Additional notes"></textarea>
+  
+  <button type="submit">Book Now</button>
+</form>
+
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycby7DrRYZYuaCds_yQtsvOeCgdm9TUFuZ9ZmcrBCVh727zGbDPz48Pr4OiRZbmreJMxo/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e) {
   e.preventDefault();
-
-  const formData = Object.fromEntries(new FormData(this).entries());
+  
+  const submitButton = e.target.querySelector('button[type="submit"]');
+  const originalText = submitButton.textContent;
+  
+  // Show loading state
+  submitButton.textContent = "Submitting...";
+  submitButton.disabled = true;
 
   try {
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
     const response = await fetch(scriptURL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
+      headers: { 
+        "Content-Type": "application/json" 
+      },
+      body: JSON.stringify(data)
     });
 
-    alert("Booking submitted successfully!");
-    this.reset();
+    const result = await response.json();
+    
+    if (result.status === "success") {
+      alert("✅ Booking submitted successfully!");
+      this.reset();
+    } else {
+      throw new Error(result.message || "Unknown error occurred");
+    }
 
   } catch (error) {
-    alert("Error submitting booking: " + error);
+    console.error("Submission error:", error);
+    alert("❌ Error submitting booking: " + error.message);
+  } finally {
+    // Reset button state
+    submitButton.textContent = originalText;
+    submitButton.disabled = false;
   }
 });
 </script>
