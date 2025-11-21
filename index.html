@@ -1,5 +1,4 @@
 <form id="bookingForm">
-  <!-- Your form fields here (name, phone, email, etc.) -->
   <input type="text" name="name" placeholder="Name" required>
   <input type="tel" name="phone" placeholder="Phone" required>
   <input type="email" name="email" placeholder="Email">
@@ -17,6 +16,7 @@
 </form>
 
 <script>
+// ⚠️ REPLACE THIS WITH YOUR NEW DEPLOYMENT URL AFTER REDEPLOYING
 const scriptURL = "https://script.google.com/macros/s/AKfycbwXfRBlpVuvBIOzpaKYMfpUn7eykKs4Op3WKF0kCGp9UNwDAnQR-PvsWDROPBewy-TA/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e) {
@@ -33,6 +33,8 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
 
+    console.log("Submitting data:", data);
+
     const response = await fetch(scriptURL, {
       method: "POST",
       headers: { 
@@ -41,18 +43,34 @@ document.getElementById("bookingForm").addEventListener("submit", async function
       body: JSON.stringify(data)
     });
 
+    // Check if response is OK
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const result = await response.json();
+    console.log("Server response:", result);
     
     if (result.status === "success") {
       alert("✅ Booking submitted successfully!");
       this.reset();
+    } else if (result.error) {
+      throw new Error(result.message || "Server error occurred");
     } else {
-      throw new Error(result.message || "Unknown error occurred");
+      throw new Error("Unexpected response from server");
     }
 
   } catch (error) {
-    console.error("Submission error:", error);
-    alert("❌ Error submitting booking: " + error.message);
+    console.error("Full error details:", error);
+    
+    // More specific error messages
+    if (error.message.includes("Failed to fetch")) {
+      alert("❌ Cannot connect to server. Please:\n• Check your internet connection\n• Verify the script URL is correct\n• Ensure Google Apps Script is properly deployed");
+    } else if (error.message.includes("HTTP error")) {
+      alert("❌ Server error: " + error.message);
+    } else {
+      alert("❌ Error: " + error.message);
+    }
   } finally {
     // Reset button state
     submitButton.textContent = originalText;
