@@ -1,23 +1,7 @@
-<form id="bookingForm">
-  <input type="text" name="name" placeholder="Full Name" required>
-  <input type="tel" name="phone" placeholder="Phone Number" required>
-  <input type="email" name="email" placeholder="Email Address">
-  <input type="text" name="bike_type" placeholder="Motorcycle Make & Model" required>
-  <select name="service" required>
-    <option value="">Select Service</option>
-    <option value="basic">Basic Clean - $50</option>
-    <option value="premium">Premium Detail - $100</option>
-    <option value="full">Full Service - $150</option>
-  </select>
-  <input type="date" name="date" required>
-  <input type="time" name="time" required>
-  <textarea name="notes" placeholder="Additional notes about your bike..."></textarea>
-  
-  <button type="submit">Book Now</button>
-</form>
-
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbws-XZzwDQCkGsQzHKm259GF-TUNyVi24jtoaUZQRfnln4TEPmec9xn6DEnZfUUbOe-/exec";
+// 🔥 CRITICAL: This URL will change after you redeploy the script
+// I'll show you exactly where to get the new URL below
+const scriptURL = "https://script.google.com/macros/s/AKfycbyVsq48UdNM7Lnt29NoPK7kt-ESSqyECWi4aDbxD_ZTt-StrJHe643wZIyU73Thqphc/exec"; // ← CHANGE THIS AFTER DEPLOYMENT
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e) {
   e.preventDefault();
@@ -43,6 +27,10 @@ document.getElementById("bookingForm").addEventListener("submit", async function
       body: JSON.stringify(data)
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const result = await response.json();
     console.log("Server response:", result);
     
@@ -58,6 +46,8 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     
     if (error.message.includes("Failed to fetch")) {
       alert("❌ Network error. Please check:\n• Your internet connection\n• That the script is properly deployed\n• Try refreshing the page");
+    } else if (error.message.includes("not found") || error.message.includes("404")) {
+      alert("❌ Script URL error. Please contact admin - script needs to be redeployed.");
     } else {
       alert("❌ Error: " + error.message);
     }
@@ -67,4 +57,30 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     submitButton.disabled = false;
   }
 });
+
+// Function to test connection (optional but helpful for debugging)
+async function testConnection() {
+  try {
+    const response = await fetch(scriptURL, {
+      method: "OPTIONS",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      console.log("✅ Connection test successful!");
+      return true;
+    } else {
+      console.log("❌ Connection test failed:", response.status);
+      return false;
+    }
+  } catch (error) {
+    console.error("❌ Connection test error:", error);
+    return false;
+  }
+}
+
+// Uncomment to run connection test on page load (for debugging)
+// document.addEventListener('DOMContentLoaded', testConnection);
 </script>
