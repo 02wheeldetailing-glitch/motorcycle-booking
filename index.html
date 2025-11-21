@@ -1,23 +1,23 @@
 <form id="bookingForm">
-  <input type="text" name="name" placeholder="Name" required>
-  <input type="tel" name="phone" placeholder="Phone" required>
-  <input type="email" name="email" placeholder="Email">
-  <input type="text" name="bike_type" placeholder="Bike Type" required>
+  <input type="text" name="name" placeholder="Full Name" required>
+  <input type="tel" name="phone" placeholder="Phone Number" required>
+  <input type="email" name="email" placeholder="Email Address">
+  <input type="text" name="bike_type" placeholder="Motorcycle Make & Model" required>
   <select name="service" required>
     <option value="">Select Service</option>
-    <option value="basic">Basic Clean</option>
-    <option value="premium">Premium Detail</option>
+    <option value="basic">Basic Clean - $50</option>
+    <option value="premium">Premium Detail - $100</option>
+    <option value="full">Full Service - $150</option>
   </select>
   <input type="date" name="date" required>
   <input type="time" name="time" required>
-  <textarea name="notes" placeholder="Additional notes"></textarea>
+  <textarea name="notes" placeholder="Additional notes about your bike..."></textarea>
   
   <button type="submit">Book Now</button>
 </form>
 
 <script>
-// ⚠️ REPLACE THIS WITH YOUR NEW DEPLOYMENT URL AFTER REDEPLOYING
-const scriptURL = "https://script.google.com/macros/s/AKfycbwXfRBlpVuvBIOzpaKYMfpUn7eykKs4Op3WKF0kCGp9UNwDAnQR-PvsWDROPBewy-TA/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbws-XZzwDQCkGsQzHKm259GF-TUNyVi24jtoaUZQRfnln4TEPmec9xn6DEnZfUUbOe-/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e) {
   e.preventDefault();
@@ -43,31 +43,21 @@ document.getElementById("bookingForm").addEventListener("submit", async function
       body: JSON.stringify(data)
     });
 
-    // Check if response is OK
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const result = await response.json();
     console.log("Server response:", result);
     
     if (result.status === "success") {
       alert("✅ Booking submitted successfully!");
       this.reset();
-    } else if (result.error) {
-      throw new Error(result.message || "Server error occurred");
     } else {
-      throw new Error("Unexpected response from server");
+      throw new Error(result.message || "Server error occurred");
     }
 
   } catch (error) {
-    console.error("Full error details:", error);
+    console.error("Full error:", error);
     
-    // More specific error messages
     if (error.message.includes("Failed to fetch")) {
-      alert("❌ Cannot connect to server. Please:\n• Check your internet connection\n• Verify the script URL is correct\n• Ensure Google Apps Script is properly deployed");
-    } else if (error.message.includes("HTTP error")) {
-      alert("❌ Server error: " + error.message);
+      alert("❌ Network error. Please check:\n• Your internet connection\n• That the script is properly deployed\n• Try refreshing the page");
     } else {
       alert("❌ Error: " + error.message);
     }
