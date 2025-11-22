@@ -1,86 +1,110 @@
-<script>
-// 🔥 CRITICAL: This URL will change after you redeploy the script
-// I'll show you exactly where to get the new URL below
-const scriptURL = "https://script.google.com/macros/s/AKfycbyVsq48UdNM7Lnt29NoPK7kt-ESSqyECWi4aDbxD_ZTt-StrJHe643wZIyU73Thqphc/exec"; // ← CHANGE THIS AFTER DEPLOYMENT
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motorcycle Detailing Booking</title>
 
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  
-  const submitButton = e.target.querySelector('button[type="submit"]');
-  const originalText = submitButton.textContent;
-  
-  // Show loading state
-  submitButton.textContent = "Submitting...";
-  submitButton.disabled = true;
-
-  try {
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log("Submitting data:", data);
-
-    const response = await fetch(scriptURL, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
     }
-
-    const result = await response.json();
-    console.log("Server response:", result);
-    
-    if (result.status === "success") {
-      alert("✅ Booking submitted successfully!");
-      this.reset();
-    } else {
-      throw new Error(result.message || "Server error occurred");
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 500px;
     }
-
-  } catch (error) {
-    console.error("Full error:", error);
-    
-    if (error.message.includes("Failed to fetch")) {
-      alert("❌ Network error. Please check:\n• Your internet connection\n• That the script is properly deployed\n• Try refreshing the page");
-    } else if (error.message.includes("not found") || error.message.includes("404")) {
-      alert("❌ Script URL error. Please contact admin - script needs to be redeployed.");
-    } else {
-      alert("❌ Error: " + error.message);
+    h2 { text-align: center; margin-bottom: 20px; color: #333; }
+    label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+    input, select, textarea, button {
+      width: 100%; padding: 10px; margin-top: 5px;
+      border-radius: 5px; border: 1px solid #ccc;
+      font-size: 16px; box-sizing: border-box;
     }
-  } finally {
-    // Reset button state
-    submitButton.textContent = originalText;
-    submitButton.disabled = false;
-  }
-});
+    button {
+      background-color: #007bff; color: #fff; border: none;
+      cursor: pointer; margin-top: 20px; transition: background 0.3s;
+    }
+    button:hover { background-color: #0056b3; }
+    .note { font-size: 12px; color: #777; margin-top: 5px; }
+  </style>
+</head>
 
-// Function to test connection (optional but helpful for debugging)
-async function testConnection() {
-  try {
-    const response = await fetch(scriptURL, {
-      method: "OPTIONS",
-      headers: {
-        'Content-Type': 'application/json'
+<body>
+
+  <div class="container">
+    <h2>Motorcycle Detailing Booking</h2>
+
+    <form id="bookingForm">
+
+      <label for="name">Full Name *</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="phone">Phone Number *</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email">
+
+      <label for="bike_type">Motorcycle Type</label>
+      <input type="text" id="bike_type" name="bike_type">
+
+      <label for="service">Service Required *</label>
+      <select id="service" name="service" required>
+        <option value="">Select a service</option>
+        <option value="Wash">Wash</option>
+        <option value="Full Detailing">Full Detailing</option>
+        <option value="Paint Protection">Paint Protection</option>
+      </select>
+
+      <label for="date">Preferred Date *</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="time">Preferred Time</label>
+      <input type="time" id="time" name="time">
+
+      <label for="notes">Additional Notes</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="Any special requests?"></textarea>
+
+      <button type="submit">Book Now</button>
+
+      <p class="note">* Required fields</p>
+    </form>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwJ0d8spK1DA7Fc0J6m54mzAA2sSaTEuaIb90cbdrUdY16Z5Xa-yDFm2jAL5XYJYI9r/exec";
+
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+
+      try {
+        await fetch(scriptURL, {
+          method: "POST",
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        alert("Booking submitted successfully!");
+        e.target.reset();
+
+      } catch (error) {
+        alert("Error submitting booking.");
       }
     });
-    
-    if (response.ok) {
-      console.log("✅ Connection test successful!");
-      return true;
-    } else {
-      console.log("❌ Connection test failed:", response.status);
-      return false;
-    }
-  } catch (error) {
-    console.error("❌ Connection test error:", error);
-    return false;
-  }
-}
+  </script>
 
-// Uncomment to run connection test on page load (for debugging)
-// document.addEventListener('DOMContentLoaded', testConnection);
-</script>
+</body>
+</html>
