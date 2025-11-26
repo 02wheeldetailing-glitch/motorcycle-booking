@@ -12,7 +12,7 @@
         }
         
         body {
-            background-color: #000;
+            background-color: #000000; /* Deep black */
             color: white;
             font-family: 'Arial', sans-serif;
             min-height: 100vh;
@@ -22,35 +22,21 @@
             padding: 20px;
         }
         
-        .header-container {
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .header-image {
-            width: 100%;
-            height: auto;
-            max-height: 300px;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-        
         .form-container {
             width: 100%;
             max-width: 500px;
-            background-color: #111;
+            background-color: #0a0a0a; /* Deep black */
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3); /* Neon blue glow */
+            border: 1px solid #00ffff; /* Neon blue border */
         }
         
         .form-title {
             text-align: center;
             margin-bottom: 25px;
             font-size: 24px;
-            color: #4CAF50;
+            color: #00ffff; /* Neon blue */
         }
         
         .form-group {
@@ -61,44 +47,48 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #ddd;
+            color: #00ffff; /* Neon blue */
         }
         
         input, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #444;
+            border: 2px solid #00ffff; /* Neon blue border */
             border-radius: 5px;
-            background-color: #222;
+            background-color: #1a1a1a; /* Darker black */
             color: white;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
         
         input:focus, select:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: #ffffff; /* White when focused */
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); /* Neon blue glow */
         }
         
         .submit-btn {
             width: 100%;
             padding: 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+            background-color: #00ffff; /* Neon blue */
+            color: #000000; /* Deep black text */
+            border: 2px solid #00ffff; /* Neon blue border */
             border-radius: 5px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         
         .submit-btn:hover:not(:disabled) {
-            background-color: #45a049;
+            background-color: #ffffff; /* White on hover */
+            color: #000000; /* Deep black text */
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8); /* Neon blue glow */
         }
         
         .submit-btn:disabled {
-            background-color: #666;
+            background-color: #333333;
+            border-color: #333333;
             cursor: not-allowed;
         }
         
@@ -111,23 +101,27 @@
         }
         
         .success {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #00ff00; /* Neon green */
+            color: #000000; /* Deep black text */
+            border: 1px solid #00ff00;
         }
         
         .error {
-            background-color: #f44336;
+            background-color: #ff0000; /* Red */
             color: white;
+            border: 1px solid #ff0000;
         }
         
         .conflict {
-            background-color: #ff9800;
-            color: white;
+            background-color: #ffff00; /* Yellow */
+            color: #000000; /* Deep black text */
+            border: 1px solid #ffff00;
         }
         
         .loading {
-            background-color: #2196F3;
-            color: white;
+            background-color: #00ffff; /* Neon blue */
+            color: #000000; /* Deep black text */
+            border: 1px solid #00ffff;
         }
         
         /* Responsive adjustments */
@@ -137,33 +131,28 @@
                 margin: 10px;
             }
             
-            .header-image {
-                max-height: 200px;
-            }
-            
             .form-title {
                 font-size: 20px;
             }
         }
         
         .required {
-            color: #ff4444;
+            color: #ff0000; /* Red */
         }
         
         .price-display {
             font-weight: bold;
-            color: #4CAF50;
+            color: #00ffff; /* Neon blue */
             margin-top: 5px;
             font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <img id="headerImage" src="" alt="Two Wheel Detailing" class="header-image">
-    </div>
-    
+    <!-- Image moved inside the form container -->
     <div class="form-container">
+        <img id="headerImage" src="" alt="Two Wheel Detailing" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 5px; margin-bottom: 20px;">
+        
         <h2 class="form-title">Book Your Detailing Service</h2>
         
         <form id="bookingForm">
@@ -203,7 +192,7 @@
             </div>
             
             <div class="form-group">
-                <label for="bikeType">Bike Type <span class="required">*</span></label>
+                <label for="bikeType">Motorcycle Make & Model <span class="required">*</span></label>
                 <input type="text" id="bikeType" name="bikeType" placeholder="e.g., Honda CBR600RR, Yamaha MT-07" required>
             </div>
             
